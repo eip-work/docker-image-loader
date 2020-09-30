@@ -1,0 +1,6 @@
+grafana/grafana:7.0.1
+prom/prometheus:v2.18.1
+prom/node-exporter:v0.17.0
+prom/blackbox-exporter:v0.14.0
+mirrorgooglecontainers/kube-state-metrics:v1.6.0
+mirrorgooglecontainers/addon-resizer:1.8.4
