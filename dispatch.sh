@@ -7,7 +7,12 @@ if [ x"${1}" = x ]; then
   exit
 fi
 
-read line < target-hosts.txt
+if [ x"${2}" = x ]; then
+  echo -e "\033[31m 请指定 target-hosts.txt 文件 \033[0m"
+  exit
+fi
+
+read line < ${2}
 
 prvKey=$(echo ${line})
 
@@ -48,8 +53,8 @@ done < ${1%???????}/images.txt" < /dev/null
       echo -e "\033[32m<<<<< 已成功将镜像分发到第 ${hostIndex} 个目标主机 ${ip} <<<<<\033[0m"
       echo ""
   fi
-done < target-hosts.txt
+done < ${2}
 
-echo -e "\033[32m----- 已成功将镜像分发到 target-hosts.txt 文件中定义的所有主机 -----\033[0m"
+echo -e "\033[32m----- 已成功将镜像分发到 ${2} 文件中定义的所有主机 -----\033[0m"
 
 echo ""

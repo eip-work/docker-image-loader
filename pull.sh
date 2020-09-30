@@ -38,5 +38,5 @@ rm -rf ${folder}
 
 echo ""
 echo "请执行一下指令，将镜像分发到 ./target-hosts.txt 文件中定义的目标主机上。"
-echo -e "\033[36m./dispatch.sh ${folder}.tar.gz \033[0m"
+echo -e "\033[36m./dispatch.sh ${folder}.tar.gz target-hosts.txt \033[0m"
 echo ""
