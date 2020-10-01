@@ -53,9 +53,9 @@ do
 
     hostIndex=`expr ${count} - 1`
     echo -e "\033[36m>>>>> 开始分发镜像到第 ${hostIndex} 个目标主机 ${ip} >>>>>\033[0m"
-    scp -P ${port} -i ${prvKey} ${1} root@${ip}:~/
+    scp -P ${port} -i ${prvKey} ${1} ${user}@${ip}:~/
 
-    ssh -p ${port} -i ${prvKey} root@${ip} "rm -rf ${1%???????} || true
+    ssh -p ${port} -i ${prvKey} ${user}@${ip} "rm -rf ${1%???????} || true
 echo -e \"\033[36mstep ${hostIndex}.1 解压缩\033[0m\"
 tar zxvf ${1}
 echo -e \"\033[36mstep ${hostIndex}.2 加载镜像\033[0m\"
