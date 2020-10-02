@@ -1,18 +1,21 @@
 # docker-image-mover
 
-我们时常遇到需要在内网环境中需要下载大量 docker 镜像的情况，例如安装 Kubernetes，安装 ceph 集群等。此时非常大的一个挑战是，如何将公网环境下可以轻松获取的 docker image 转移到内网环境的机器上。 
+docker-image-mover 可以将一系列指定的 docker 镜像（外网环境）加载到一系列指定的目标（通常是内网环境）机器上。
 
-docker-image-mover 项目假设您有一台机器 A 能够访问公网，有另外一台机器 B 能够访问内网，且您有办法从机器 A 传输文件到机器 B 上（或者机器 A、机器 B 是同一台机器）。
+> * docker-image-mover 被大量使用在 K8S 管理工具 [kuboard](https://kuboard.cn) 的内网安装场景下；
+> * 可以完成类似任务的有 [sealos](https://github.com/fanux/sealos) 。Sealos 是一款非常优秀的 Kubernetes 离线安装工具）。
 
-按照本文档的描述，docker-image-mover 能够帮助您便捷的将一系列指定的 docker 镜像加载到一系列指定的内网机器上。前提条件：
-* 机器 A、机器 B 以及所有的目标机器都安装了 docker
+docker-image-mover 项目假设您有一台机器 A 能够访问外网，有另外一台机器 B 能够访问所有的目标机器（通常是内网环境），且您有办法从机器 A 传输文件到机器 B 上（或者机器 A、机器 B 是同一台机器）。
+
+前提条件：
+* 机器 A 以及所有的目标机器都安装了 docker
 
 docker-image-mover 工作过程：
 1. 在机器 A 上执行 `./pull.sh abc-images.txt` 以下载 `abc-images.txt` 文件中所指定的 docker image，镜像将被保存到 `abc-images.tar.gz` 文件中；
 2. 将 `./dispatch.sh` 文件和 `abc-images.tar.gz` 文件复制到机器 B；
 3. 在机器 B 上执行 `./dispatch.sh abc-images.tar.gz target-hosts.txt`，将前面步骤中下载到的镜像分发到 `target-hosts.txt` 文件中所定义的所有目标机器上。
 
-具体操作过程请参考本文后面的描述
+具体操作过程描述如下：
 
 ## 准备工作
 
@@ -116,4 +119,4 @@ docker-image-mover 工作过程：
   ./dispatch.sh abc-images.tar.gz target-hosts.txt
   ```
 
-**至此，您已经成功地将制定的 docker image 分发到指定的目标机器上。**
+**至此，您已经成功地将指定的 docker image 分发到指定的目标机器上。**
