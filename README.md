@@ -1,38 +1,38 @@
-# docker-image-mover
+# docker-image-loader
 
-docker-image-mover 可以将一系列指定的 docker 镜像（外网环境）加载到一系列指定的目标（通常是内网环境）机器上。
+docker-image-loader 可以将一系列指定的 docker 镜像（外网环境）加载到一系列指定的目标（通常是内网环境）机器上。
 
-> * docker-image-mover 被大量使用在 K8S 管理工具 [kuboard](https://kuboard.cn) 的内网安装场景下；
-> * 可以完成类似任务的有 [sealos](https://github.com/fanux/sealos) 。Sealos 是一款非常优秀的 Kubernetes 离线安装工具）。
+> * docker-image-loader 被大量使用在 K8S 管理工具 [kuboard](https://kuboard.cn) 的内网安装场景下；
+> * 可以完成类似任务的有 [sealos](https://github.com/fanux/sealos) 。（Sealos 是一款非常优秀的 Kubernetes 离线安装工具）。
 
-docker-image-mover 项目假设您有一台机器 A 能够访问外网，有另外一台机器 B 能够访问所有的目标机器（通常是内网环境），且您有办法从机器 A 传输文件到机器 B 上（或者机器 A、机器 B 是同一台机器）。
+docker-image-loader 项目假设您有一台机器 A 能够访问外网，有另外一台机器 B 能够访问所有的目标机器（通常是内网环境），且您有办法从机器 A 传输文件到机器 B 上（或者机器 A、机器 B 是同一台机器）。
 
 前提条件：
 * 机器 A 以及所有的目标机器都安装了 docker
 
-docker-image-mover 工作过程：
-1. 在机器 A 上执行 `./pull.sh abc-images.txt` 以下载 `abc-images.txt` 文件中所指定的 docker image，镜像将被保存到 `abc-images.tar.gz` 文件中；
-2. 将 `./dispatch.sh` 文件和 `abc-images.tar.gz` 文件复制到机器 B；
-3. 在机器 B 上执行 `./dispatch.sh abc-images.tar.gz target-hosts.txt`，将前面步骤中下载到的镜像分发到 `target-hosts.txt` 文件中所定义的所有目标机器上。
+docker-image-loader 工作过程：
+1. 在机器 A 上执行 `./pull.sh imagets-abc.txt` 以下载 `imagets-abc.txt` 文件中所指定的 docker image，镜像将被保存到 `imagets-abc.tar.gz` 文件中；
+2. 将 `./dispatch.sh` 文件和 `imagets-abc.tar.gz` 文件复制到机器 B；
+3. 在机器 B 上执行 `./dispatch.sh imagets-abc.tar.gz target-hosts.txt`，将前面步骤中下载到的镜像分发到 `target-hosts.txt` 文件中所定义的所有目标机器上。
 
 具体操作过程描述如下：
 
 ## 准备工作
 
-### 下载 docker-image-mover
+### 下载 docker-image-loader
 
 * 在机器 A 上创建一个临时目录，并切换到该目录
 
   ```sh
-  mkdir docker-image-mover
-  cd docker-image-mover
+  mkdir docker-image-loader
+  cd docker-image-loader
   ```
 
-* 下载 docker-image-mover
+* 下载 docker-image-loader
 
   ```sh
-  wget https://addons.kuboard.cn/downloads/docker-image-mover/dispatch.sh
-  wget https://addons.kuboard.cn/downloads/docker-image-mover/pull.sh
+  wget https://addons.kuboard.cn/downloads/docker-image-loader/dispatch.sh
+  wget https://addons.kuboard.cn/downloads/docker-image-loader/pull.sh
   chmod +x dispatch.sh
   chmod +x pull.sh
   ```
@@ -60,7 +60,7 @@ docker-image-mover 工作过程：
 ## 在机器 A 上下载镜像
 
 
-* 创建 `abc-images.txt` 文件，内容如下所示：
+* 创建 `imagets-abc.txt` 文件，内容如下所示：
 
   文件中的每一行代表一个镜像（需包含 TAG）
   > * 文件名称可以自定义
@@ -77,26 +77,26 @@ docker-image-mover 工作过程：
 * 执行下载任务
 
   ``` sh
-  ./pull.sh abc-images.txt
+  ./pull.sh imagets-abc.txt
   ```
 
-  镜像下载任务完成之后，会在同目录下生成一个压缩文件 `abc-images.tar.gz` （文件名称与 abc-images.txt 相同，后缀不同）
+  镜像下载任务完成之后，会在同目录下生成一个压缩文件 `imagets-abc.tar.gz` （文件名称与 imagets-abc.txt 相同，后缀不同）
 
 
 ## 将文件复制到机器 B
 
-用你自己的办法，将如下两个文件复制到机器 B 的某个目录，假设路径是 `~/docker-image-mover`：
+用你自己的办法，将如下两个文件复制到机器 B 的某个目录，假设路径是 `~/docker-image-loader`：
 * `dispatch.sh`
-* `abc-images.tar.gz` （在前一个步骤中生成的文件）
+* `imagets-abc.tar.gz` （在前一个步骤中生成的文件）
 
 ## 从机器 B 分发镜像到目标机器
 
 在机器 B 上执行：
 
-* 切换到 `~/docker-image-mover` 目录
+* 切换到 `~/docker-image-loader` 目录
 
   ```sh
-  cd ~/docker-image-mover
+  cd ~/docker-image-loader
   ```
 
 * 创建 `target-hosts.txt` 文件，内容如下
@@ -116,7 +116,7 @@ docker-image-mover 工作过程：
 * 执行分发任务
   ``` sh
   chmod +x dispatch.sh
-  ./dispatch.sh abc-images.tar.gz target-hosts.txt
+  ./dispatch.sh imagets-abc.tar.gz target-hosts.txt
   ```
 
 **至此，您已经成功地将指定的 docker image 分发到指定的目标机器上。**
